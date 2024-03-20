@@ -8,5 +8,15 @@ int main(int argc, char *argv[]){
     machine_load_program(&machine, argv[1]);
 
     printf("entry: %lx\n",machine.mmu.entry);
+    printf("host entry: %llx\n",TO_HOST(machine.mmu.entry));
+    printf("host alloc: %lx\n",machine.mmu.host_alloc);
+    printf("machine address: 0x%lx\n", (u64)&machine);
+
+    while (true) {
+        enum exit_reason_t reason = machine_step(&machine);
+        assert(reason == ecall);
+
+        //handle ecall
+    }
     return 0;
 }
