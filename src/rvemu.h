@@ -106,6 +106,7 @@ enum exit_reason_t {
 
 typedef struct {
     enum exit_reason_t exit_reason;
+    u64 reenter_pc;
     u64 gpr[32];
     u64 pc;
 } state_t;
