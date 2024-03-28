@@ -92,7 +92,11 @@ typedef struct {
 } mmu_t;
 
 void mmu_load_elf(mmu_t *, int );
+u64 mmu_alloc(mmu_t *, i64);
 
+inline void mmu_write(u64 addr, u8 *data, size_t len) {
+    memcpy((void *)TO_HOST(addr), (void *)data, len);
+}
 
 /* 
 state.c
@@ -120,8 +124,20 @@ typedef struct {
     mmu_t mmu;
 } machine_t;
 
+inline u64 machine_get_gpr(machine_t *m, i32 reg) {
+    assert(reg >= 0 && reg <= num_gpr);
+    return m->state.gpr[reg];
+}
+
+inline void machine_set_gpr(machine_t *m, i32 reg, u64 data) {
+    assert(reg >= 0 && reg <= num_gpr);
+    m->state.gpr[reg] = data;
+}
+
+void machine_setup(machine_t *, int , char **);
 enum exit_reason_t machine_step(machine_t *);
 void machine_load_program(machine_t *, char *);
+
 
 /* 
 interp.c

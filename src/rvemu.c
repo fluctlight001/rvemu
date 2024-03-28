@@ -6,6 +6,7 @@ int main(int argc, char *argv[]){
 
     machine_t machine = {0};
     machine_load_program(&machine, argv[1]);
+    machine_setup(&machine, argc, argv);
 
     printf("entry: %lx\n",machine.mmu.entry);
     printf("host entry: %llx\n",TO_HOST(machine.mmu.entry));
@@ -17,6 +18,8 @@ int main(int argc, char *argv[]){
         assert(reason == ecall);
 
         //handle ecall
+        // printf("\n");
+        fatal("syscall!!");
     }
     return 0;
 }

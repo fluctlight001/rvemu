@@ -312,17 +312,21 @@ static void func_jalr(state_t *state, inst_t *inst) {
     state->gpr[inst->rd] = state->pc + (inst->rvc ? 2 : 4);
     state->exit_reason = indirect_branch;
     state->reenter_pc = (rs1 + (i64)inst->imm) & ~(u64)1;
+    inst->cont = true;
+    
 }
 
 static void func_jal(state_t *state, inst_t *inst) {
     state->gpr[inst->rd] = state->pc + (inst->rvc ? 2 : 4);
     state->reenter_pc = state->pc = state->pc + (i64)inst->imm;
     state->exit_reason = direct_branch;
+    inst->cont = true;
 }
 
 static void func_ecall(state_t *state, inst_t *inst) {
     state->exit_reason = ecall;
     state->reenter_pc = state->pc + 4;
+    inst->cont = true;
 }
 
 static void func_csrrw(state_t *state, inst_t *inst) { FUNC_CSR(); }
@@ -412,10 +416,11 @@ void exec_block_interp(state_t *state) {
     static inst_t inst = {0};
     while(true) {
         u32 data = *(u32 *)TO_HOST(state->pc);
-        printf("%x\n",data);
+        // printf("%x\n",data);
         inst_decode(&inst, data);
 
         funcs[inst.type](state, &inst);
+        printf("pc:%lx rs1:%x pc:%lx cont:%d\n",state->pc,inst.rs1,state->reenter_pc,inst.cont?1:0);
         state->gpr[zero] = 0;
 
         if (inst.cont) break;
