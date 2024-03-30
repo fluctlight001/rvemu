@@ -14,7 +14,7 @@ enum exit_reason_t machine_step(machine_t *m) {
 
         break;  // ecall
     }
-    printf("current pc:%lx reenter pc:%lx\n",m->state.pc,m->state.reenter_pc);
+    printf("current pc:%lx reenter pc:%lx syscall:%ld\n",m->state.pc,m->state.reenter_pc,m->state.gpr[a7]);
     m->state.pc = m->state.reenter_pc;
     assert(m->state.exit_reason == ecall);
     return ecall;

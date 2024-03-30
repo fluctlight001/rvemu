@@ -19,7 +19,11 @@ int main(int argc, char *argv[]){
 
         //handle ecall
         // printf("\n");
-        fatal("syscall!!");
+        // fatal("syscall!!");
+        u64 syscall = machine_get_gpr(&machine, a7);
+        // fatalf("syscall :%ld",syscall);
+        u64 ret = do_syscall(&machine, syscall);
+        machine_set_gpr(&machine, a0, ret);
     }
     return 0;
 }

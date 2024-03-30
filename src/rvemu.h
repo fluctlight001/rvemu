@@ -149,3 +149,8 @@ decode.c
  */
 
 void inst_decode(inst_t *, u32);
+
+/* 
+syscall.c
+ */
+u64 do_syscall(machine_t *, u64);

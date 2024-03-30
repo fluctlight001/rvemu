@@ -420,7 +420,7 @@ void exec_block_interp(state_t *state) {
         inst_decode(&inst, data);
 
         funcs[inst.type](state, &inst);
-        printf("pc:%lx rs1:%x pc:%lx cont:%d\n",state->pc,inst.rs1,state->reenter_pc,inst.cont?1:0);
+        // printf("pc:%lx rs1:%x pc:%lx cont:%d\n",state->pc,inst.rs1,state->reenter_pc,inst.cont?1:0);
         state->gpr[zero] = 0;
 
         if (inst.cont) break;
